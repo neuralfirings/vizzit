@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Vizzit</title>
+
+    <script type="text/javascript" src="public/js/libraries.min.js"></script>
+    <link href="public/css/libraries.css" rel="stylesheet">
+
+    <link href="public/css/application.css" rel="stylesheet">
+    <script type="text/javascript" src="public/js/application.js"></script>
+
+    <meta name="viewport" content="width=640" />
+  </head>
+  <body>
+    <div id="ajax_progress_container">
+      <div class="container">
+        <div id="ajax_progress" class="progress" style="">
+          <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%;">
+            loading...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #585858; color: #DDD; padding-top: 5px;">
+      <div class="container">
+        <div class="row" id="vizform">
+          <div class="col-sm-2">
+            <div class="form-group">
+              <span for="subreddit">Search in </span>
+              <input type="text" class="form-control" id="subreddit" placeholder="r/subreddit">
+            </div>
+          </div>
+
+
+          <div class="col-sm-1">
+            <div class="form-group">
+              <span for="numthreads"> threads</span>
+              <select class="form-control" id="numthreads" placeholder="25">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="75">75</option>
+                <option value="100">100</option>
+              </select>
+<!--               
+              <input type="text" class="form-control" id="numthreads" placeholder="25"> -->
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <span for="searchstring"> for </span>
+              <input type="text" class="form-control" id="searchstring" placeholder="best widget">
+            </div>
+          </div>
+
+          <div class="col-sm-5">
+            <div class="form-group">
+              <span for="limitwords"> and limit results to </span>
+              <input type="text" class="form-control" id="limitwords" placeholder="thing one,thing two">
+            </div>
+          </div>
+
+          <div class="col-sm-1">
+            <div>&nbsp;</div>
+            <div class="btn btn-primary" id="vizzit">Vizzit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6" id="charts-container">
+          <h3>Total Score <small>ignores negative comments</small></h3>
+          <canvas class="chart" id="chart_weighted" width="600" height="250"></canvas>
+
+          <h3>Number of Replies Mentioning Keyword</h3>
+          <canvas class="chart" id="chart_unweighted" width="600" height="250"></canvas>
+        </div>
+        <br />
+        <div class="col-sm-6">
+          <div id="commentviewer" class="well" style="height: 600px; overflow-y: scroll; overflow-x:hidden"></div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <small style="color: #888">
+        Note: this script only searches for mentions of the keywords. Yes, I realize some of the mentions may be unfavorable reviews, but meh, use this to look at the by and large.
+        <br />
+        Stuff this page builds on: <a href="http://www.chartjs.org/">chart.js</a>, 
+        <a href="http://jquery.com">jquery</a>, 
+        <a href="getbootstrap.com">bootstrap</a>, 
+        <a href="http://gulpjs.com">gulp</a>
+      </small>
+    </div>
+  </body>
+</html>
