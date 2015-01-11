@@ -2,7 +2,7 @@ $(document).ready () ->
 
   # $("#subreddit").val("r/3dprinting")
   # $("#searchstring").val("best printer")
-  # $("#limitwords").val("lulzbot,makerbot,ultimaker,printrbot")
+  # $("#limitwords").val("makerbot, lulzbot")
 
   $(".chart").attr("width", $("#charts-container").width() + "px")
 
