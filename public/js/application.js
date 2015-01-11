@@ -1,3 +1,5 @@
+console.log("r1");
+
 $(document).ready(function() {
   $(".chart").attr("width", $("#charts-container").width() + "px");
   return $("#vizzit").click(function() {

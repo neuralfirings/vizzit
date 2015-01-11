@@ -1,3 +1,4 @@
+console.log "r1"
 $(document).ready () ->
 
   # $("#subreddit").val("r/3dprinting")
