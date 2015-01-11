@@ -95,7 +95,7 @@ $(document).ready () ->
                 console.log santized_word, word
               keywords.push santized_word
       else # count only limited words
-        keywords = $("#limitwords").val().split(",")
+        keywords = $("#limitwords").val().replace(", ", ",").split(",")
 
       for keyword in keywords
         for comment in data_weighted

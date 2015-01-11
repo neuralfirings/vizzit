@@ -76,7 +76,7 @@ $(document).ready(function() {
           }
         }
       } else {
-        keywords = $("#limitwords").val().split(",");
+        keywords = $("#limitwords").val().replace(", ", ",").split(",");
       }
       for (_l = 0, _len3 = keywords.length; _l < _len3; _l++) {
         keyword = keywords[_l];
