@@ -8,13 +8,13 @@ $(document).ready(function() {
   get_numthreads = getUrlParameter("nt");
   get_searchstring = getUrlParameter("ss");
   get_limitwords = getUrlParameter("lw");
+  $("#subreddit").val(get_subreddit);
+  $("#searchstring").val(get_searchstring);
+  $("#limitwords").val(get_limitwords);
+  $("#numthreads").val(get_numthreads);
   LIMIT = 50;
   $(".chart").attr("width", $("#charts-container").width() + "px");
-  if (get_subreddit && get_numthreads && get_searchstring && get_limitwords) {
-    $("#subreddit").val(get_subreddit);
-    $("#searchstring").val(get_searchstring);
-    $("#limitwords").val(get_limitwords);
-    $("#numthreads").val(get_numthreads);
+  if (get_subreddit && get_numthreads && get_searchstring) {
     sub = $("#subreddit").val();
     query = $("#searchstring").val();
     max_num_threads = $("#numthreads").val();
@@ -49,7 +49,7 @@ $(document).ready(function() {
     data_weighted = [];
     $.all_comments = {};
     return processData = function(threads) {
-      var children, comment, comment_url, ctx, ctx_w, data, data_unweighted_labels, data_unweighted_values, data_w, data_weighted_labels, data_weighted_values, ignore_words, keyword, keywords, s, santized_word, sortable, sortable_weighted, thread, thread_id, thread_results, thread_title, thread_url, word, wordCounts, wordCounts_weighted, words, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref;
+      var children, comment, comment_url, ctx, ctx_w, data, data_unweighted_labels, data_unweighted_values, data_w, data_weighted_labels, data_weighted_values, ignore_words, keyword, keywords, s, san_comment_arr, santized_word, sortable, sortable_weighted, thread, thread_id, thread_results, thread_title, thread_url, word, wordCounts, wordCounts_weighted, words, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref;
       for (_i = 0, _len = threads.length; _i < _len; _i++) {
         thread = threads[_i];
         thread_title = thread[0].data.children[0].data.title;
@@ -70,7 +70,7 @@ $(document).ready(function() {
         }
       }
       data_unweighted = data_unweighted.toLowerCase();
-      words = data_unweighted.split(/\b/);
+      words = data_unweighted.split(" ");
       wordCounts = {};
       wordCounts_weighted = {};
       ignore_words = [" ", "the", ",", "i", "to", "a", ".", "and", "'", "/", "of", "it", "you", "in", "is", "that", "with", ", ", "for", "my", "be", "this", "have", "but", "://", "com", "are", "on", "s", "would", "http", "if", "-", "can", ".↵↵", "at", "as", "t", "want", "(", "will", "out", "not", "m", "an", "get", "about", "what", "one", "from", "we", "they", "just", "your", "use", "it", "all", "www", "ve", "do", "!", "more", "so", "like", "good", "make", "has", "me", "or", "=", "](", ")", "if", "here", "was", "0", "some", "am", ": ", "time", "been", " $", ";", "really", "also", "by", "there", "[", "", "!", ". ", ":", "?", "$", "love", "something", "could", "now", "people", "amp", ").", "very", "ll", "great", "only", "&", "them", "their", "any", "think", "even", "its", "much", "imgur", "using", "when", "don", "had", "work", "these", "community", "d", "into", "see", "our", "best", "well", "way", "going", "though", "able", "new", "because", "better", "who", "which", "things", "quality", "few", "probably", "than", "own", "should", "first", "sure", "looking", "say", "re", "no", "%", "doing", "buy", "https", "products", "tool", "works", "service", "ever", "board", "user", "told", "free", "try", "lots", "helpful", "paying", "wouldn", "tinkering", "machine", "thing", "budget", "hobby", "spending", "different", "story", "many", "-$", "price", "output", "however", "required", "maybe", "worth", "wait", "machines", "come", "still", "aren", "reviews", "yet", "expecting", "over", "models", "let", "begin", "recently", "/)", "happy", "around", "while", "pretty", "support", "why", "seeing", "little", "talk", "market", "looks", "option", "consider", "everyone", "recommend", "personally", "received", "easy", "access", "pcb", "heated", "bed", "type", "success", "shop", "black", "assembled", "hate", "believe", "html", "absolutely", "amazing", "large", "purchase", "imho", "then", "...", "made", "*", "awesome", "across", "day", "printing", ".(", "getting", "anything", "lot", "money", "expenses", "although", "camera", "need", "8", "run", "back", "order", "three", "...[", "deleted", "]", "definitely", "casting", "afford", "injection", "molding", "setup", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "he", "co", "en", "de", "us", "ht", "hi", "im", "ee", "ge"];
@@ -81,9 +81,6 @@ $(document).ready(function() {
           santized_word = word.replace(/\ /g, "").replace(/(\r\n|\n|\r)/gm, "");
           if ($.inArray(santized_word, ignore_words) === -1) {
             if ($.inArray(santized_word, keywords) === -1) {
-              if (santized_word === "x") {
-                console.log(santized_word, word);
-              }
               keywords.push(santized_word);
             }
           }
@@ -95,7 +92,8 @@ $(document).ready(function() {
         keyword = keywords[_l];
         for (_m = 0, _len4 = data_weighted.length; _m < _len4; _m++) {
           comment = data_weighted[_m];
-          if (comment[1].split(keyword).length > 1) {
+          san_comment_arr = comment[1].replace(/\W+/g, " ").toLowerCase().split(" ");
+          if ($.inArray(keyword.toLowerCase(), san_comment_arr) > -1) {
             if ($.all_comments[keyword] === void 0) {
               $.all_comments[keyword] = [];
             }
@@ -125,6 +123,7 @@ $(document).ready(function() {
       sortable_weighted.sort(function(a, b) {
         return b[1] - a[1];
       });
+      window.s = sortable;
       data_unweighted_labels = [];
       data_unweighted_values = [];
       for (_n = 0, _len5 = sortable.length; _n < _len5; _n++) {
@@ -160,8 +159,10 @@ $(document).ready(function() {
       $("#chart_weighted").click(function(evt) {
         var bar, kw;
         bar = $.chart_weighted.getBarsAtEvent(evt);
-        kw = bar[0].label;
-        return showComments(kw);
+        if (bar[0]) {
+          kw = bar[0].label;
+          return showComments(kw);
+        }
       });
       if ($.chart_unweighted !== void 0) {
         $.chart_unweighted.destroy();
@@ -184,8 +185,10 @@ $(document).ready(function() {
       return $("#chart_unweighted").click(function(evt) {
         var bar, kw;
         bar = $.chart_unweighted.getBarsAtEvent(evt);
-        kw = bar[0].label;
-        return showComments(kw);
+        if (bar[0]) {
+          kw = bar[0].label;
+          return showComments(kw);
+        }
       });
     };
   }

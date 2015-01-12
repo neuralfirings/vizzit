@@ -6,15 +6,16 @@ $(document).ready () ->
   get_searchstring = getUrlParameter("ss")
   get_limitwords = getUrlParameter("lw")
 
+  $("#subreddit").val get_subreddit
+  $("#searchstring").val get_searchstring
+  $("#limitwords").val get_limitwords
+  $("#numthreads").val get_numthreads
+
   LIMIT = 50 # limit chart results
 
   $(".chart").attr("width", $("#charts-container").width() + "px")
 
-  if get_subreddit and get_numthreads and get_searchstring and get_limitwords
-    $("#subreddit").val get_subreddit
-    $("#searchstring").val get_searchstring
-    $("#limitwords").val get_limitwords
-    $("#numthreads").val get_numthreads
+  if get_subreddit and get_numthreads and get_searchstring #and get_limitwords
 
     sub = $("#subreddit").val()
     query = $("#searchstring").val()
@@ -67,7 +68,7 @@ $(document).ready () ->
 
       # COUNT WORDS
       data_unweighted = data_unweighted.toLowerCase()
-      words = data_unweighted.split(/\b/);
+      words = data_unweighted.split(" ");
       wordCounts = {};
       wordCounts_weighted = {};
       ignore_words = [
@@ -95,19 +96,24 @@ $(document).ready () ->
 
       if $("#limitwords").val() == "" # count all words
         keywords = []
+        # i = 0
         for word in words
           santized_word = word.replace(/\ /g, "").replace(/(\r\n|\n|\r)/gm,"")
           if $.inArray(santized_word, ignore_words) == -1
             if $.inArray(santized_word, keywords) == -1 
-              if santized_word == "x"
-                console.log santized_word, word
+              # if santized_word == "rc"
+              #   console.log santized_word, word, i
+              #   console.log words[i-5],words[i-4],words[i-3],words[i-2], words[i-1], words[i], words[i+1], words[i+2]
               keywords.push santized_word
+          # i++
       else # count only limited words
         keywords = $("#limitwords").val().replace(", ", ",").split(",")
 
       for keyword in keywords
         for comment in data_weighted
-          if comment[1].split(keyword).length > 1
+          san_comment_arr = comment[1].replace(/\W+/g, " ").toLowerCase().split(" ")
+          if $.inArray(keyword.toLowerCase(), san_comment_arr) > -1
+          # if comment[1].split(keyword).length > 1
             if $.all_comments[keyword] == undefined
               $.all_comments[keyword] = []
             $.all_comments[keyword].push comment
@@ -129,6 +135,8 @@ $(document).ready () ->
         return b[1] - a[1]
       sortable_weighted.sort (a, b) ->
         return b[1] - a[1]
+
+      window.s = sortable
 
       data_unweighted_labels = []
       data_unweighted_values = []
@@ -166,8 +174,9 @@ $(document).ready () ->
 
       $("#chart_weighted").click (evt) ->
         bar = $.chart_weighted.getBarsAtEvent(evt)
-        kw = bar[0].label
-        showComments(kw)
+        if bar[0]
+          kw = bar[0].label
+          showComments(kw)
       # UNWEIGHTED
       if $.chart_unweighted != undefined
         $.chart_unweighted.destroy();
@@ -189,8 +198,9 @@ $(document).ready () ->
 
       $("#chart_unweighted").click (evt) ->
         bar = $.chart_unweighted.getBarsAtEvent(evt)
-        kw = bar[0].label
-        showComments(kw)
+        if bar[0]
+          kw = bar[0].label
+          showComments(kw)
 
 
 showComments = (kw) ->
