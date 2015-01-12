@@ -1,9 +1,20 @@
-console.log("r1");
+var getUrlParameter, showComments;
+
+console.log("r2");
 
 $(document).ready(function() {
+  var LIMIT, data_unweighted, data_weighted, get_limitwords, get_numthreads, get_searchstring, get_subreddit, max_num_threads, processData, query, query_url, sub;
+  get_subreddit = getUrlParameter("sr");
+  get_numthreads = getUrlParameter("nt");
+  get_searchstring = getUrlParameter("ss");
+  get_limitwords = getUrlParameter("lw");
+  LIMIT = 50;
   $(".chart").attr("width", $("#charts-container").width() + "px");
-  return $("#vizzit").click(function() {
-    var data_unweighted, data_weighted, max_num_threads, processData, query, query_url, showComments, sub;
+  if (get_subreddit && get_numthreads && get_searchstring && get_limitwords) {
+    $("#subreddit").val(get_subreddit);
+    $("#searchstring").val(get_searchstring);
+    $("#limitwords").val(get_limitwords);
+    $("#numthreads").val(get_numthreads);
     sub = $("#subreddit").val();
     query = $("#searchstring").val();
     max_num_threads = $("#numthreads").val();
@@ -37,8 +48,8 @@ $(document).ready(function() {
     data_unweighted = "";
     data_weighted = [];
     $.all_comments = {};
-    processData = function(threads) {
-      var LIMIT, children, comment, comment_url, ctx, ctx_w, data, data_unweighted_labels, data_unweighted_values, data_w, data_weighted_labels, data_weighted_values, ignore_words, keyword, keywords, s, santized_word, sortable, sortable_weighted, thread, thread_id, thread_results, thread_title, thread_url, word, wordCounts, wordCounts_weighted, words, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref;
+    return processData = function(threads) {
+      var children, comment, comment_url, ctx, ctx_w, data, data_unweighted_labels, data_unweighted_values, data_w, data_weighted_labels, data_weighted_values, ignore_words, keyword, keywords, s, santized_word, sortable, sortable_weighted, thread, thread_id, thread_results, thread_title, thread_url, word, wordCounts, wordCounts_weighted, words, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref;
       for (_i = 0, _len = threads.length; _i < _len; _i++) {
         thread = threads[_i];
         thread_title = thread[0].data.children[0].data.title;
@@ -128,7 +139,6 @@ $(document).ready(function() {
         data_weighted_labels.push(s[0]);
         data_weighted_values.push(s[1]);
       }
-      LIMIT = 50;
       if ($.chart_weighted !== void 0) {
         $.chart_weighted.destroy();
       }
@@ -178,16 +188,31 @@ $(document).ready(function() {
         return showComments(kw);
       });
     };
-    return showComments = function(kw) {
-      var comment, comments, _i, _len, _results;
-      comments = $.all_comments[kw];
-      $("#commentviewer").empty();
-      _results = [];
-      for (_i = 0, _len = comments.length; _i < _len; _i++) {
-        comment = comments[_i];
-        _results.push($("#commentviewer").append("<div class='comment'>" + " <span class='badge'>" + comment[0] + " points</span>&nbsp;" + "<a target='_blank' href='" + comment[5] + "'>" + comment[4] + "</a>" + "<br />" + comment[1].replace(new RegExp('(^|)(' + kw + ')(|$)', 'ig'), '$1<span class="search-kw text-danger">$2</span>$3') + "<br />" + "<small>[" + comment[2] + " replies | " + " <a target='_blank' href='" + comment[3] + "'>permalink</a>]</small></div><hr />"));
-      }
-      return _results;
-    };
-  });
+  }
 });
+
+showComments = function(kw) {
+  var comment, comments, _i, _len, _results;
+  comments = $.all_comments[kw];
+  $("#commentviewer").empty();
+  _results = [];
+  for (_i = 0, _len = comments.length; _i < _len; _i++) {
+    comment = comments[_i];
+    _results.push($("#commentviewer").append("<div class='comment'>" + " <span class='badge'>" + comment[0] + " points</span>&nbsp;" + "<a target='_blank' href='" + comment[5] + "'>" + comment[4] + "</a>" + "<br />" + comment[1].replace(new RegExp('(^|)(' + kw + ')(|$)', 'ig'), '$1<span class="search-kw text-danger">$2</span>$3') + "<br />" + "<small>[" + comment[2] + " replies | " + " <a target='_blank' href='" + comment[3] + "'>permalink</a>]</small></div><hr />"));
+  }
+  return _results;
+};
+
+getUrlParameter = function(sParam) {
+  var i, sPageURL, sParameterName, sURLVariables;
+  sPageURL = window.location.search.substring(1);
+  sURLVariables = sPageURL.split('&');
+  i = 0;
+  while (i < sURLVariables.length) {
+    sParameterName = sURLVariables[i].split('=');
+    if (sParameterName[0] === sParam) {
+      return decodeURIComponent(sParameterName[1].replace(/\+/g, '%20').replace("/", ""));
+    }
+    i++;
+  }
+};

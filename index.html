@@ -24,11 +24,11 @@
 
     <div style="background: #585858; color: #DDD; padding-top: 5px;">
       <div class="container">
-        <div class="row" id="vizform">
+        <form class="row" id="vizform" method="get" action="/">
           <div class="col-sm-2">
             <div class="form-group">
               <span for="subreddit">Search in </span>
-              <input type="text" class="form-control" id="subreddit" placeholder="r/subreddit">
+              <input type="text" name="sr" class="form-control" id="subreddit" placeholder="r/subreddit">
             </div>
           </div>
 
@@ -36,7 +36,7 @@
           <div class="col-sm-1">
             <div class="form-group">
               <span for="numthreads"> threads</span>
-              <select class="form-control" id="numthreads" placeholder="25">
+              <select name="nt" class="form-control" id="numthreads" placeholder="25">
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="25" selected>25</option>
@@ -44,30 +44,29 @@
                 <option value="75">75</option>
                 <option value="100">100</option>
               </select>
-<!--               
-              <input type="text" class="form-control" id="numthreads" placeholder="25"> -->
             </div>
           </div>
 
           <div class="col-sm-3">
             <div class="form-group">
               <span for="searchstring"> for </span>
-              <input type="text" class="form-control" id="searchstring" placeholder="best widget">
+              <input name="ss" type="text" class="form-control" id="searchstring" placeholder="best widget">
             </div>
           </div>
 
           <div class="col-sm-5">
             <div class="form-group">
               <span for="limitwords"> and limit results to </span>
-              <input type="text" class="form-control" id="limitwords" placeholder="thing one,thing two">
+              <input name="lw" type="text" class="form-control" id="limitwords" placeholder="thing one,thing two">
             </div>
           </div>
 
           <div class="col-sm-1">
             <div>&nbsp;</div>
-            <div class="btn btn-primary" id="vizzit">Vizzit</div>
+            <!-- <div class="btn btn-primary" id="vizzit">Vizzit</div> -->
+            <button type="submit" method="get" class="btn btn-primary" id="vizzit">Vizzit</button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
 
@@ -93,7 +92,8 @@
         Stuff this page builds on: <a href="http://www.chartjs.org/">chart.js</a>, 
         <a href="http://jquery.com">jquery</a>, 
         <a href="getbootstrap.com">bootstrap</a>, 
-        <a href="http://gulpjs.com">gulp</a>
+        <a href="http://gulpjs.com">gulp</a>. 
+        Source code available on <a href="https://github.com/neuralfirings/vizzit">Github</a>.
       </small>
     </div>
   </body>

@@ -1,13 +1,20 @@
-console.log "r1"
+console.log "r2"
 $(document).ready () ->
 
-  # $("#subreddit").val("r/3dprinting")
-  # $("#searchstring").val("best printer")
-  # $("#limitwords").val("makerbot, lulzbot")
+  get_subreddit = getUrlParameter("sr")
+  get_numthreads = getUrlParameter("nt")
+  get_searchstring = getUrlParameter("ss")
+  get_limitwords = getUrlParameter("lw")
+
+  LIMIT = 50 # limit chart results
 
   $(".chart").attr("width", $("#charts-container").width() + "px")
 
-  $("#vizzit").click () ->
+  if get_subreddit and get_numthreads and get_searchstring and get_limitwords
+    $("#subreddit").val get_subreddit
+    $("#searchstring").val get_searchstring
+    $("#limitwords").val get_limitwords
+    $("#numthreads").val get_numthreads
 
     sub = $("#subreddit").val()
     query = $("#searchstring").val()
@@ -136,8 +143,7 @@ $(document).ready () ->
         data_weighted_labels.push s[0]
         data_weighted_values.push s[1]
 
-      # CHART I%
-      LIMIT = 50
+      # CHART IT
 
       # WEIGHTED
       if $.chart_weighted != undefined
@@ -186,14 +192,26 @@ $(document).ready () ->
         kw = bar[0].label
         showComments(kw)
 
-    showComments = (kw) ->
-      comments = $.all_comments[kw]
-      $("#commentviewer").empty()
-      for comment in comments
-        $("#commentviewer").append "<div class='comment'>" + 
-          " <span class='badge'>" + comment[0] + " points</span>&nbsp;" + 
-          "<a target='_blank' href='" + comment[5] + "'>" + comment[4] + "</a>" +
-          "<br />" +
-          comment[1].replace(new RegExp('(^|)(' + kw + ')(|$)','ig'), '$1<span class="search-kw text-danger">$2</span>$3') + "<br />" +
-          "<small>[" + comment[2] + " replies | " + 
-          " <a target='_blank' href='" + comment[3] + "'>permalink</a>]</small></div><hr />"
+
+showComments = (kw) ->
+  comments = $.all_comments[kw]
+  $("#commentviewer").empty()
+  for comment in comments
+    $("#commentviewer").append "<div class='comment'>" + 
+      " <span class='badge'>" + comment[0] + " points</span>&nbsp;" + 
+      "<a target='_blank' href='" + comment[5] + "'>" + comment[4] + "</a>" +
+      "<br />" +
+      comment[1].replace(new RegExp('(^|)(' + kw + ')(|$)','ig'), '$1<span class="search-kw text-danger">$2</span>$3') + "<br />" +
+      "<small>[" + comment[2] + " replies | " + 
+      " <a target='_blank' href='" + comment[3] + "'>permalink</a>]</small></div><hr />"
+
+getUrlParameter = (sParam) ->
+    sPageURL = window.location.search.substring(1);
+    sURLVariables = sPageURL.split('&');
+    i = 0
+    while i < sURLVariables.length
+      sParameterName = sURLVariables[i].split('=');
+      if sParameterName[0] == sParam
+        return decodeURIComponent( sParameterName[1].replace(/\+/g, '%20').replace("/", "") )
+      i++
+
