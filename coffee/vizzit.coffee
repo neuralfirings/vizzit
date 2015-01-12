@@ -8,7 +8,7 @@ $(document).ready () ->
 
   $("#subreddit").val get_subreddit
   $("#searchstring").val get_searchstring
-  $("#limitwords").val get_limitwords
+  $("#limitwords").val get_limitwords #.replace(", ", ",")
   $("#numthreads").val get_numthreads
 
   LIMIT = 50 # limit chart results
@@ -107,7 +107,7 @@ $(document).ready () ->
               keywords.push santized_word
           # i++
       else # count only limited words
-        keywords = $("#limitwords").val().replace(", ", ",").split(",")
+        keywords = $("#limitwords").val().split(/[ ,]+/) #replace(", ", ",").split(",")
 
       for keyword in keywords
         for comment in data_weighted
